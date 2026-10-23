@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase RAG - Conference Q&A</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="deploy-info" class="deploy-info">
+        Updated: <span id="deploy-date">...</span>
+        &nbsp;·&nbsp; Views: <span id="page-views-count">...</span>
+    </div>
+
+    <!-- Setup Banner (shows when configuration is incomplete) -->
+    <div id="setup-banner" class="setup-banner hidden">
+        <div class="setup-banner-content">
+            <div class="setup-banner-header">
+                <span class="setup-icon">⚙️</span>
+                <h3>Setup Required</h3>
+                <button id="close-setup-banner" class="close-btn" title="Dismiss">×</button>
+            </div>
+
+            <div class="setup-url-section">
+                <label>Your GitHub Pages URL:</label>
+                <div class="url-copy-container">
+                    <code id="github-pages-url">Calculating...</code>
+                    <button id="copy-url-btn" class="copy-btn" title="Copy URL">📋</button>
+                </div>
+                <small>Add this URL to Supabase → Authentication → URL Configuration</small>
+            </div>
+
+            <div class="setup-checklist">
+                <div class="setup-item" id="check-config">
+                    <span class="check-icon">⏳</span>
+                    <span>Configure Supabase credentials in config.js</span>
+                </div>
+                <div class="setup-item" id="check-connection">
+                    <span class="check-icon">⏳</span>
+                    <span>Supabase connection</span>
+                </div>
+                <div class="setup-item" id="check-redirect">
+                    <span class="check-icon">⚠️</span>
+                    <span>Add redirect URL to Supabase (manual step)</span>
+                </div>
+            </div>
+
+            <div class="setup-links">
+                <a href="#" id="supabase-config-link" target="_blank" class="setup-link">🔗 Configure Supabase Redirect
+                    URLs</a>
+                <a href="#" id="setup-guide-link" target="_blank" class="setup-link">📖 View Full Setup Guide</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen">
+        <div class="container">
+            <div class="card">
+                <h1>Conference Q&A</h1>
+                <p class="subtitle">Ask questions about conference talks using AI</p>
+
+                <div id="login-form">
+                    <input type="email" id="email-input" placeholder="Enter your email" />
+                    <button id="login-btn" class="btn-primary">Sign In with Magic Link</button>
+                    <p class="info-text">We'll send you a magic link to sign in</p>
+                </div>
+
+                <div id="login-message" class="message hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="app-screen" class="screen hidden">
+        <nav class="navbar">
+            <h2>Conference Q&A</h2>
+            <div class="user-info">
+                <span id="user-email"></span>
+                <button id="logout-btn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="search-panels">
+                <!-- Panel 1: Keyword Search -->
+                <div class="search-panel" id="keyword-panel">
+                    <div class="panel-header">
+                        <h3>🔍 Keyword Search</h3>
+                        <span class="status-badge not-ready" id="keyword-status">🔴 Not Ready</span>
+                    </div>
+                    <p class="panel-description">Search conference talks by keyword. Works once you import the
+                        conference data.</p>
+                    <div class="panel-input">
+                        <input type="text" id="keyword-input" placeholder="Search by keyword..." autocomplete="off"
+                            disabled />
+                        <button id="keyword-btn" class="btn-primary" disabled>Search</button>
+                    </div>
+                    <div class="search-results" id="keyword-results"></div>
+                </div>
+
+                <!-- Panel 2: Semantic Search -->
+                <div class="search-panel" id="semantic-panel">
+                    <div class="panel-header">
+                        <h3>🧠 Semantic Search</h3>
+                        <span class="status-badge not-ready" id="semantic-status">🔴 Not Ready</span>
+                    </div>
+                    <p class="panel-description">Find similar content by meaning, not just keywords. Requires embeddings
+                        and the embed-question Edge Function.</p>
+                    <div class="panel-input">
+                        <input type="text" id="semantic-input" placeholder="Search by meaning..." autocomplete="off"
+                            disabled />
+                        <button id="semantic-btn" class="btn-primary" disabled>Search</button>
+                    </div>
+                    <div class="search-results" id="semantic-results"></div>
+                </div>
+
+                <!-- Panel 3: RAG (Ask a Question) -->
+                <div class="search-panel" id="rag-panel">
+                    <div class="panel-header">
+                        <h3>🤖 Ask a Question (RAG)</h3>
+                        <span class="status-badge not-ready" id="rag-status">🔴 Not Ready</span>
+                    </div>
+                    <p class="panel-description">Get AI-generated answers based on conference talks. Requires all Edge
+                        Functions deployed.</p>
+                    <div class="panel-input">
+                        <input type="text" id="rag-input" placeholder="Ask a question about conference talks..."
+                            autocomplete="off" disabled />
+                        <button id="rag-btn" class="btn-primary" disabled>Ask</button>
+                    </div>
+                    <div class="search-results" id="rag-results"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Configuration (Students will replace this) -->
+    <script src="config.js"></script>
+
+    <!-- Main Application Logic -->
+    <script src="app.js"></script>
+</body>
+
+</html>

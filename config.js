@@ -1,0 +1,33 @@
+// ============================================
+// STUDENT CONFIGURATION FILE
+// ============================================
+// This file reads your Supabase credentials from config.public.json.
+// config.public.json contains values that are SAFE to commit:
+//   - Supabase URL
+//   - Supabase anon key (protected by Row Level Security)
+//
+// SECRET values (API keys, service keys) go in config.secret.json
+// which is git-ignored and NEVER committed.
+
+// Default placeholder config — overwritten when config.public.json loads
+const SUPABASE_CONFIG = {
+    url: 'https://rokdtmndogqkbbcftrkv.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJva2R0bW5kb2dxa2JiY2Z0cmt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2OTg0MTYsImV4cCI6MjEwODI3NDQxNn0.XHUlhTPkNLeP3tDEwc22AzDFl11X2bh7qRG0fX-ZYnU'
+};
+
+// Load config.public.json and update SUPABASE_CONFIG
+fetch('config.public.json')
+    .then(response => {
+        if (!response.ok) throw new Error('config.public.json not found');
+        return response.json();
+    })
+    .then(config => {
+        if (config.SUPABASE_URL) SUPABASE_CONFIG.url = config.SUPABASE_URL;
+        if (config.SUPABASE_ANON_KEY) SUPABASE_CONFIG.anonKey = config.SUPABASE_ANON_KEY;
+        // Re-initialize now that config is loaded
+        window.dispatchEvent(new Event('config-loaded'));
+    })
+    .catch(err => {
+        console.warn('⚠️ Could not load config.public.json:', err.message);
+        console.warn('   Create config.public.json with your Supabase URL and anon key.');
+    });
